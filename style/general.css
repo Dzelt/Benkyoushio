@@ -16,10 +16,12 @@ nav{
 }
 img.logo{
     height: 80px;
+    padding-left: 3%;
 }
 nav ul{
     float: right;
     margin-right: 20px;
+    padding-right: 3%;
 }
 nav ul li{
     display: inline-block;
@@ -54,8 +56,10 @@ footer ul li a{
     font-size: 14px;
     word-spacing: 2px;
     text-transform: capitalize;
+    padding-top: 1%;
+    padding-bottom: 1%;
 }
-a.active, a:hover{
+a.active, .navbtn:hover{
     background: red;
     transition: 0.5s;
 }
