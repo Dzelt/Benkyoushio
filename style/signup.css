@@ -5,7 +5,7 @@
     height: 620px;
     margin: auto;
     background-color: white;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .login-box {
@@ -15,6 +15,18 @@
     border-radius: 3px;
     background-color: white;
 }
+
+.container1{
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+.container2{
+    padding-top: 5%;
+    padding-bottom: 10%;
+}
+
+
 
 h1 {
     text-align: center;

@@ -117,8 +117,8 @@ a.active, .navbtn:hover{
 .wrapper{
     margin: 0 auto;
     width: 70%;
-    padding-top: 5%;
-    padding-bottom: 5%;
+    padding-top: 3%;
+    padding-bottom: 3%;
 }
 .text1{
     background: #C5C5C5;
@@ -127,7 +127,11 @@ a.active, .navbtn:hover{
     padding-right: 5%;
     padding-top: 5%;
     padding-bottom: 5%;
-    text-align: center;
+    text-align: left;
     color: black
     ;
+}
+.page-title{
+    padding-top: 3%;
+    padding-left: 5%;
 }
