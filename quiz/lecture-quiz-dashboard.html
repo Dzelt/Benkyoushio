@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>Benkyoushio - Lecture Quiz Dashboard</title>
+    <!-- Favicon -->
+    <link rel="icon" href="../picture/favicon.png">
+    <!--Use this css for Navigation bar and footer-->
+    <link rel="stylesheet" href="../style/general.css">
+    <!--Always needed in any page-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Always needed in any page-->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fa fas fa-bars"></i>
+        </label>
+        <a href="../index.html"><img class="logo" src="../picture/logo.png" alt="image is not available"></a>
+        <ul class="menubtn">
+            <!-- <li><a class="navbtn" href="#">Notes</a></li>
+            <li><a class="navbtn" href="/quiz/quiz-dashboard.html">Quiz</a></li>
+            <li><a class="navbtn" href="#">Forum</a></li>
+            <li><a class="navbtn" href="#">Sign In</a></li> -->
+        </ul>
+    </nav>
+    <div class="page-title">
+        <h1>Quiz Dashboard</h1>
+    </div>
+    <div class="wrapper">
+        <div class="text1">
+            <div class="container-fluid">
+                <div class="col-md-12 alert alert-primary">Quiz List</div>
+                <button class="btn btn-primary bt-sm" id="new_quiz"><i class="fa fa-plus"></i> Add New</button>
+                <br>
+                <br>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered" id='table'>
+                            <colgroup>
+                                <col width="40%">
+                                <col width="7%">
+                                <col width="7%">
+                                <col width="15%">
+                                <col width="36%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Items</th>
+                                    <th>Marks</th>
+                                    <!-- <?php if($_SESSION['login_user_type'] ==1): ?> -->
+                                    <th>Chapter</th>
+                                    <!-- <?php endif; ?> -->
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <?php
+                            $where = '';
+                            if($_SESSION['login_user_type'] == 2){
+                                $where = " where u.id = ".$_SESSION['login_id']." ";
+                            }
+                            $qry = $conn->query("SELECT q.*,u.name as fname from quiz_list q left join users u on q.user_id = u.id ".$where." order by q.title asc ");
+                            $i = 1;
+                            if($qry->num_rows > 0){
+                                while($row= $qry->fetch_assoc()){
+                                    $items = $conn->query("SELECT count(id) as item_count from questions where qid = '".$row['id']."' ")->fetch_array()['item_count'];
+                                ?> -->
+                                <tr>
+                                    <!-- <td><?php echo $i++ ?></td>
+                                <td><?php echo $row['title'] ?></td>
+                                <td><?php echo $items ?></td>
+                                <td><?php echo $row['qpoints'] ?></td>
+                                    <?php if($_SESSION['login_id'] ==1): ?>
+                                <td><?php echo $row['fname'] ?></td>
+                                    <?php endif; ?> -->
+                                    <td>Null</td>
+                                    <td>Null</td>
+                                    <td>Null</td>
+                                    <td>Null</td>
+                                    <td>
+                                        <center>
+                                            <a class="btn btn-sm btn-outline-primary edit_quiz"
+                                                href="./quiz_view.php?id=<?php echo $row['id']?>"><i
+                                                    class="fa fa-task"></i>
+                                                Manage</a>
+                                            <button class="btn btn-sm btn-outline-primary edit_quiz"
+                                                data-id="<?php echo $row['id']?>" type="button"><i
+                                                    class="fa fa-edit"></i>
+                                                Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger remove_quiz"
+                                                data-id="<?php echo $row['id']?>" type="button"><i
+                                                    class="fa fa-trash"></i>
+                                                Delete</button>
+                                        </center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="manage_quiz" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <h4 class="modal-title" id="myModallabel">Add New quiz</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        <form id='quiz-frm'>
+                            <div class="modal-body">
+                                <div id="msg"></div>
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="hidden" name="id" />
+                                    <input type="text" name="title" required="required" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Points per question</label>
+                                    <input type="nember" name="qpoints" required="" class="form-control" />
+                                </div>
+                                <!-- <?php if ($_SESSION['login_user_type'] == 1) : ?> -->
+                                <div class="form-group">
+                                    <label>Faculty</label>
+                                    <select name="user_id" required="required" class="form-control" />
+                                    <option value="" selected="" disabled="">Select Here</option>
+                                    <!-- <?php
+                                        $qry = $conn->query("SELECT * from users where user_type = 2 order by name asc");
+                                        while ($row = $qry->fetch_assoc()) {
+                                        ?> -->
+                                    <option value="<?php echo $row['id'] ?>"><?php echo $row['name'] ?></option>
+                                    <!-- <?php } ?> -->
+                                    </select>
+                                </div>
+                                <!-- <?php else : ?> -->
+                                <input type="hidden" name="user_id" />
+                                <!-- <?php endif; ?> -->
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" name="save"><span
+                                        class="glyphicon glyphicon-save"></span>
+                                    Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+    <footer align="center">
+        <!-- <div class="footer-content">
+            <ul>
+                <li><a class="navbtn" href="../about/about_lecture.html">About Lecture</a></li> |
+                <li><a class="navbtn" href="#">Student List</a></li> |
+                <li><a class="navbtn" href="../about/about_us.html">About Us</a></li>
+            </ul>
+        </div> -->
+        <div class="footer-bottom">
+            <p>Copyright &copy;2022 Benkyoushio.</p>
+        </div>
+    </footer>
+</body>
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable();
+        $('#new_quiz').click(function () {
+            $('#msg').html('')
+            $('#manage_quiz .modal-title').html('Add New quiz')
+            $('#manage_quiz #quiz-frm').get(0).reset()
+            $('#manage_quiz').modal('show')
+        })
+        $('.edit_quiz').click(function () {
+            var id = $(this).attr('data-id')
+            $.ajax({
+                url: './get_quiz.php?id=' + id,
+                error: err => console.log(err),
+                success: function (resp) {
+                    if (typeof resp != undefined) {
+                        resp = JSON.parse(resp)
+                        $('[name="id"]').val(resp.id)
+                        $('[name="title"]').val(resp.title)
+                        $('[name="qpoints"]').val(resp.qpoints)
+                        $('[name="user_id"] ').val(resp.user_id)
+                        $('#manage_quiz .modal-title').html('Edit Quiz')
+                        $('#manage_quiz').modal('show')
+
+                    }
+                }
+            })
+
+        })
+        $('.remove_quiz').click(function () {
+            var id = $(this).attr('data-id')
+            var conf = confirm('Are you sure to delete this data.');
+            if (conf == true) {
+                $.ajax({
+                    url: './delete_quiz.php?id=' + id,
+                    error: err => console.log(err),
+                    success: function (resp) {
+                        if (resp == true)
+                            location.reload()
+                    }
+                })
+            }
+        })
+        $('#quiz-frm').submit(function (e) {
+            e.preventDefault();
+            $('#quiz-frm [name="submit"]').attr('disabled', true)
+            $('#quiz-frm [name="submit"]').html('Saving...')
+            $('#msg').html('')
+
+            $.ajax({
+                url: './save_quiz.php',
+                method: 'POST',
+                data: $(this).serialize(),
+                error: err => {
+                    console.log(err)
+                    alert('An error occured')
+                    $('#quiz-frm [name="submit"]').removeAttr('disabled')
+                    $('#quiz-frm [name="submit"]').html('Save')
+                },
+                success: function (resp) {
+                    if (typeof resp != undefined) {
+                        resp = JSON.parse(resp)
+                        if (resp.status == 1) {
+                            alert('Data successfully saved');
+                            location.replace('./quiz_view.php?id=' + resp.id)
+                        } else {
+                            $('#msg').html('<div class="alert alert-danger">' + resp.msg +
+                                '</div>')
+
+                        }
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+</html>

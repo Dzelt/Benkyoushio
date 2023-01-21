@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>Benkyoushio - Quiz Dashboard</title>
+    <!-- Favicon -->
+    <link rel="icon" href="../picture/favicon.png">
+    <!--Use this css for Navigation bar and footer-->
+    <link rel="stylesheet" href="../style/general.css">
+    <!--Always needed in any page-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Always needed in any page-->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fa fas fa-bars"></i>
+        </label>
+        <a href="../index.html"><img class="logo" src="../picture/logo.png" alt="image is not available"></a>
+        <!-- <ul class="menubtn">
+            <li><a class="navbtn" href="#">Notes</a></li>
+            <li><a class="navbtn" href="/quiz/quiz-dashboard.html">Quiz</a></li>
+            <li><a class="navbtn" href="#">Forum</a></li>
+            <li><a class="navbtn" href="#">Sign In</a></li>
+        </ul> -->
+    </nav>
+    <div class="page-title">
+        <h1>Quiz Management</h1>
+    </div>
+    <div class="wrapper">
+        <div class="text1">
+            <div class="container-fluid">
+                <div class="col-md-12 alert alert-primary"><?php echo $qry['title'] ?></div>
+                <button class="btn btn-primary bt-sm" id="new_question"><i class="fa fa-plus"></i> Add Question</button>
+                <br>
+                <br>
+                <div class="card">
+                    <div class="card-header">
+                        Questions
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <!-- <?php
+                            $qry = $conn->query("SELECT * FROM questions where qid = " . $_GET['id'] . " order by order_by asc");
+                            while ($row = $qry->fetch_array()) {
+                            ?> -->
+                            <li class="list-group-item">Null<?php echo $row['question'] ?><br>
+                                <center>
+                                    <button class="btn btn-sm btn-outline-primary edit_question"
+                                        data-id="<?php echo $row['id'] ?>" type="button"><i
+                                            class="fa fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger remove_question"
+                                        data-id="<?php echo $row['id'] ?>" type="button"><i
+                                            class="fa fa-trash"></i></button>
+                                </center>
+                            </li>
+                            <!-- <?php
+                            }
+                            ?> -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal fade" id="manage_question" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModallabel">Add New Question</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            </div>
+                            <form id='question-frm'>
+                                <div class="modal-body">
+                                    <div id="msg"></div>
+                                    <div class="form-group">
+                                        <label>Question (Put the question Here)</label>
+                                        <input type="hidden" name="qid" value="<?php echo $_GET['id'] ?>" />
+                                        <input type="hidden" name="id" />
+                                        <textarea rows='3' name="question" required="required"
+                                            class="form-control"></textarea>
+                                    </div>
+                                    <label>Options: (Put all possible answer, and tick the correct answer)</label>
+                                    <div class="form-group">
+                                        <textarea rows="2" name="question_opt[0]" required=""
+                                            class="form-control"></textarea>
+                                        <span>
+                                            <label><input type="radio" name="is_right[0]" class="is_right" value="1">
+                                                <small>Question Answer</small></label>
+                                        </span>
+                                        <br>
+                                        <textarea rows="2" name="question_opt[1]" required=""
+                                            class="form-control"></textarea>
+                                        <label><input type="radio" name="is_right[1]" class="is_right" value="1">
+                                            <small>Question Answer</small></label>
+                                        <br>
+                                        <textarea rows="2" name="question_opt[2]" required=""
+                                            class="form-control"></textarea>
+                                        <label><input type="radio" name="is_right[2]" class="is_right" value="1">
+                                            <small>Question Answer</small></label>
+                                        <br>
+                                        <textarea rows="2" name="question_opt[3]" required=""
+                                            class="form-control"></textarea>
+                                        <label><input type="radio" name="is_right[3]" class="is_right" value="1">
+                                            <small>Question Answer</small></label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" name="save"><span
+                                            class="glyphicon glyphicon-save"></span> Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="manage_student" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModallabel">Add New Student/s</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            </div>
+                            <form id='student-frm'>
+                                <div class="modal-body">
+                                    <div id="msg"></div>
+                                    <div class="form-group">
+                                        <label>Student/s</label>
+                                        <br>
+                                        <input type="hidden" name="qid" value="<?php echo $_GET['id'] ?>" />
+                                        <select rows='3' name="user_id[]" required="required" multiple
+                                            class="form-control select2" style="width: 100% !important">
+                                            <?php
+                                            $student = $conn->query('SELECT u.*,s.level_section as ls FROM users u left join students s on u.id = s.user_id where u.user_type = 3 ');
+                                            while ($row = $student->fetch_assoc()) {
+                                            ?>
+                                            <option value="<?php echo $row['id'] ?>">
+                                                <?php echo ucwords($row['name']) . ' ' . $row['ls'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" name="save"><span
+                                            class="glyphicon glyphicon-save"></span> Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+    <footer align="center">
+        <div class="footer-content">
+            <!-- <ul>
+            <li><a class="navbtn" href="../about/about_lecture.html">About Lecture</a></li> |
+            <li><a class="navbtn" href="#">Student List</a></li> |
+            <li><a class="navbtn" href="../about/about_us.html">About Us</a></li>
+        </ul> -->
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright &copy;2022 Benkyoushio.</p>
+        </div>
+    </footer>
+</body>
+
+<script>
+    $(document).ready(function () {
+        $(".select2").select2({
+            placeholder: "Select here",
+            width: 'resolve'
+        });
+        $('#table').DataTable();
+        $('#new_question').click(function () {
+            $('#msg').html('')
+            $('#manage_question .modal-title').html('Add New Question')
+            $('#manage_question #question-frm').get(0).reset()
+            $('#manage_question').modal('show')
+        })
+        $('#new_student').click(function () {
+            $('#msg').html('')
+            $('#manage_student').modal('show')
+        })
+        $('.edit_question').click(function () {
+            var id = $(this).attr('data-id')
+            $.ajax({
+                url: './get_question.php?id=' + id,
+                error: err => console.log(err),
+                success: function (resp) {
+                    if (typeof resp != undefined) {
+                        resp = JSON.parse(resp)
+                        $('[name="id"]').val(resp.qdata.id)
+                        $('[name="question"]').val(resp.qdata.question)
+                        Object.keys(resp.odata).map(k => {
+                            var data = resp.odata[k]
+                            $('[name="question_opt[' + k + ']"]').val(data
+                                .option_txt);
+                            if (data.is_right == 1)
+                                $('[name="is_right[' + k + ']"]').prop('checked',
+                                    true);
+                        })
+                        $('#manage_question .modal-title').html('Edit Question')
+                        $('#manage_question').modal('show')
+
+                    }
+                }
+            })
+
+        })
+        $('.is_right').each(function () {
+            $(this).click(function () {
+                $('.is_right').prop('checked', false);
+                $(this).prop('checked', true);
+            })
+        })
+        $('.remove_question').click(function () {
+            var id = $(this).attr('data-id')
+            var conf = confirm('Are you sure to delete this data.');
+            if (conf == true) {
+                $.ajax({
+                    url: './delete_question.php?id=' + id,
+                    error: err => console.log(err),
+                    success: function (resp) {
+                        if (resp == true)
+                            location.reload()
+                    }
+                })
+            }
+        })
+        $('.remove_student').click(function () {
+            var qid = $(this).attr('data-qid')
+            var conf = confirm('Are you sure to delete this data.');
+            if (conf == true) {
+                $.ajax({
+                    url: './delete_quiz_student.php?qid=' + qid,
+                    error: err => console.log(err),
+                    success: function (resp) {
+                        if (resp == true)
+                            location.reload()
+                    }
+                })
+            }
+        })
+        $('#question-frm').submit(function (e) {
+            e.preventDefault();
+            $('#question-frm [name="submit"]').attr('disabled', true)
+            $('#question-frm [name="submit"]').html('Saving...')
+            $('#msg').html('')
+
+            $.ajax({
+                url: './save_question.php',
+                method: 'POST',
+                data: $(this).serialize(),
+                error: err => {
+                    console.log(err)
+                    alert('An error occured')
+                    $('#quiz-frm [name="submit"]').removeAttr('disabled')
+                    $('#quiz-frm [name="submit"]').html('Save')
+                },
+                success: function (resp) {
+                    if (resp == 1) {
+                        alert('Data successfully saved');
+                        location.reload()
+                    }
+                }
+            })
+        })
+        $('#student-frm').submit(function (e) {
+            e.preventDefault();
+            $('#student-frm [name="submit"]').attr('disabled', true)
+            $('#student-frm [name="submit"]').html('Saving...')
+            $('#msg').html('')
+
+            $.ajax({
+                url: './quiz_student.php',
+                method: 'POST',
+                data: $(this).serialize(),
+                error: err => {
+                    console.log(err)
+                    alert('An error occured')
+                    $('#quiz-frm [name="submit"]').removeAttr('disabled')
+                    $('#quiz-frm [name="submit"]').html('Save')
+                },
+                success: function (resp) {
+                    if (resp == 1) {
+                        alert('Data successfully saved');
+                        location.reload()
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+</html>
