@@ -51,8 +51,7 @@ print_r($_SESSION);
         </label>
         <a href="../index.php"><img class="logo" src="../picture/logo.png" alt="image is not available"></a>
         <ul class="menubtn">
-            <li><a class="navbtn" href="#">Notes</a></li>
-            <li><a class="navbtn" href="/quiz/quiz-dashboard.html">Quiz</a></li>
+            <li><a class="navbtn" href="quiz-dashboard.php">Quiz</a></li>
             <li><a class="navbtn" href="#">Forum</a></li>
             <li><a class="navbtn" href="?logout">Log Out</a></li>
         </ul>
@@ -83,32 +82,33 @@ print_r($_SESSION);
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <?php
-                                        $qry = $conn->query("SELECT * from  quiz_list where id in  (SELECT quiz_id FROM quiz_student_list where user_id ='" . $_SESSION['login_id'] . "' ) order by title asc ");
-                                        $i = 1;
-                                        if ($qry->num_rows > 0) {
-                                            while ($row = $qry->fetch_assoc()) {
-                                                $status = $conn->query("SELECT * from history where quiz_id = '" . $row['id'] . "' and user_id ='" . $_SESSION['login_id'] . "' ");
-                                                $hist = $status->fetch_array();
-                                        ?> -->
-                                <tr>
-                                    <td>Null</td>
-                                    <td>Null</td>
-                                    <td>Null</td>
-                                    <td>
-                                        <center>
-                                            <!-- <?php if ($status->num_rows <= 0) : ?> -->
-                                            <a class="btn btn-sm btn-outline-primary" href="./answer_sheet.php?id=<?php echo $row['id'] ?>"><i class="fa fa-pencil"></i> Take Quiz</a>
-                                            <!-- <?php else : ?> -->
-                                            <a class="btn btn-sm btn-outline-primary" href="./view_answer.php?id=<?php echo $row['id'] ?>"><i class="fa fa-eye"></i> View</a>
-                                            <!-- <?php endif; ?> -->
-                                        </center>
-                                    </td>
-                                </tr>
-                                <!-- <?php
-                                            }
-                                        }
-                                        ?> -->
+                                <?php
+                                $qry = $conn->query("SELECT * from  quiz_list where id in  (SELECT quiz_id FROM quiz_student_list where user_id ='" . $_SESSION['login_id'] . "' ) order by title asc ");
+                                $i = 1;
+                                if ($qry->num_rows > 0) {
+                                    while ($row = $qry->fetch_assoc()) {
+                                        $status = $conn->query("SELECT * from history where quiz_id = '" . $row['id'] . "' and user_id ='" . $_SESSION['login_id'] . "' ");
+                                        $hist = $status->fetch_array();
+                                ?>
+                                        <tr>
+                                            <td><?php echo $i++ ?></td>
+                                            <td><?php echo $row['title'] ?></td>
+                                            <td><?php echo $status->num_rows > 0 ? $hist['score'] . '/' . $hist['total_score'] : 'N/A' ?></td>
+                                            <td><?php echo $status->num_rows > 0 ? 'Taken' : 'Pending' ?></td>
+                                            <td>
+                                                <center>
+                                                    <?php if ($status->num_rows <= 0) : ?>
+                                                        <a class="btn btn-sm btn-outline-primary" href="./answer_sheet.php?id=<?php echo $row['id'] ?>"><i class="fa fa-pencil"></i> Take Quiz</a>
+                                                    <?php else : ?>
+                                                        <a class="btn btn-sm btn-outline-primary" href="./view_answer.php?id=<?php echo $row['id'] ?>"><i class="fa fa-eye"></i> View</a>
+                                                    <?php endif; ?>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                <?php
+                                    }
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>

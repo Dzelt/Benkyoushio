@@ -3,7 +3,7 @@
 require("function.php");
 
 if (!isset($_SESSION["user"])) {
-    header("location: index.php");
+    header("location: admin-login.php");
     exit();
 }
 
@@ -23,7 +23,7 @@ print_r($_SESSION);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Title -->
-    <title>Benkyoushio - Dashboard</title>
+    <title>Benkyoushio - Admin Dashboard</title>
     <!-- Favicon -->
     <link rel="icon" href="./picture/favicon.png">
     <!--Use this css for Navigation bar and footer-->
@@ -42,13 +42,13 @@ print_r($_SESSION);
         </label>
         <a href="index.php"><img class="logo" src="./picture/logo.png" alt="image is not available"></a>
         <ul class="menubtn">
-            <li><a class="navbtn" href="./quiz/quiz-dashboard.php">Quiz</a></li>
+            <li><a class="navbtn" href="./quiz/quiz-management.php">Quiz</a></li>
             <li><a class="navbtn" href="#">Forum</a></li>
             <li><a class="navbtn" href="?logout">Log Out</a></li>
         </ul>
     </nav>
     <div class="page-title">
-        <h1>Dashboard</h1>
+        <h1>Admin Dashboard</h1>
     </div>
     <div class="wrapper">
         <div class="text1">

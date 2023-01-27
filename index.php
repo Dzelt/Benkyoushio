@@ -35,7 +35,7 @@ if (isset($_SESSION["user"])) {
             <label for="check" class="checkbtn">
                 <i class="fa fas fa-bars"></i>
             </label>
-            <a href="index.html"><img class="logo" src="picture/logo.png" alt="image is not available"></a>
+            <a href="index.php"><img class="logo" src="picture/logo.png" alt="image is not available"></a>
             <ul class="menubtn">
                 <li><a class="navbtn" href="about/about_lecture.html">About Lecture</a></li>
                 <li><a class="navbtn" href="about/about_us.html">About Us</a></li>
