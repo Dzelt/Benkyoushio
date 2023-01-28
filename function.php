@@ -16,7 +16,7 @@ function connect()
     }
 }
 
-function registerUser($email, $username, $password, $confirm_password)
+function registerUser($user_type, $email, $username, $password, $confirm_password)
 {
     $mysqli = connect();
     $args = func_get_args();
@@ -40,7 +40,7 @@ function registerUser($email, $username, $password, $confirm_password)
         return "Email is not valid";
     }
     // check existing email (avoid duplicate email)
-    $stmt = $mysqli->prepare("SELECT email FROM student WHERE email = ?");
+    $stmt = $mysqli->prepare("SELECT email FROM user WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -54,7 +54,7 @@ function registerUser($email, $username, $password, $confirm_password)
     }
 
     // check existing username (avoid duplicate username)
-    $stmt = $mysqli->prepare("SELECT username FROM student WHERE username = ?");
+    $stmt = $mysqli->prepare("SELECT username FROM user WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -73,10 +73,11 @@ function registerUser($email, $username, $password, $confirm_password)
     // hashing the password before save at the database
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     // Submitting user data function
-    $stmt = $mysqli->prepare("INSERT INTO student(username, password, email) VALUES(?,?,?)");
-    $stmt->bind_param("sss", $username, $hashed_password, $email);
+    $stmt = $mysqli->prepare("INSERT INTO user(user_type, username, password, email) VALUES(?,?,?,?)");
+    $stmt->bind_param("ssss", $user_type, $username, $hashed_password, $email);
     $stmt->execute();
     if ($stmt->affected_rows != 1) {
+
         return "An error occured. Try again.";
     } else {
         return "success";
@@ -97,7 +98,7 @@ function loginUser($email, $password)
     $password = filter_var($password, FILTER_SANITIZE_STRING);
 
     // look for the account information
-    $sql = "SELECT email, password FROM student WHERE email = ?";
+    $sql = "SELECT email, password, user_type, username FROM user WHERE email = ?";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -105,15 +106,24 @@ function loginUser($email, $password)
     $data = $result->fetch_assoc();
 
     if ($data == NULL) {
+        $stmt->close();
         return "Wrong Email or Password";
     }
 
     if (password_verify($password, $data["password"]) == FALSE) {
+        $stmt->close();
         return "Wrong Email or Password";
     } else {
-        $_SESSION["user"] = $email;
-        header("location: dashboard.php");
-        exit();
+        $_SESSION["user"] = $data['username'];
+        $_SESSION["user_type"] = $data['user_type'];
+        $stmt->close();
+        if ($_SESSION["user_type"] == 1) {
+            header("location: admin-dashboard.php");
+            exit();
+        } else {
+            header("location: dashboard.php");
+            exit();
+        }
     }
 }
 
@@ -204,6 +214,7 @@ function loginAdmin($email, $password)
     $email = filter_var($email, FILTER_SANITIZE_STRING);
     $password = filter_var($password, FILTER_SANITIZE_STRING);
 
+    // Security purpose
     $sql = "SELECT email, password FROM admin WHERE email = ?";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("s", $email);
@@ -216,6 +227,7 @@ function loginAdmin($email, $password)
     }
 
     if (password_verify($password, $data["password"]) == FALSE) {
+        $stmt->close();
         return "Wrong Email or Password";
     } else {
         $_SESSION["user"] = $email;

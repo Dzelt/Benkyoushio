@@ -28,7 +28,7 @@ print_r($_SESSION);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Title -->
-    <title>Benkyoushio - Quiz Dashboard</title>
+    <title>Benkyoushio - Quiz Page</title>
     <!-- Favicon -->
     <link rel="icon" href="../picture/favicon.png">
     <!--Use this css for Navigation bar and footer-->
@@ -50,47 +50,70 @@ print_r($_SESSION);
         <a href="../index.php"><img class="logo" src="../picture/logo.png" alt="image is not available"></a>
         <ul class="menubtn">
             <li><a class="navbtn" href="quiz-dashboard.php">Quiz</a></li>
-            <li><a class="navbtn" href="#">Forum</a></li>
             <li><a class="navbtn" href="?logout">Log Out</a></li>
         </ul>
     </nav>
     <div class="page-title">
-        <h1>Quiz Dashboard</h1>
+        <a href="quiz-dashboard.php" class="btn btn-danger">BACK</a>
     </div>
-    <div class="wrapper">
-        <div class="text1">
+
+    <?php
+    $conn = connect();
+    $qry = $conn->query("SELECT * FROM quiz where id = " . $_GET['id'])->fetch_array();
+    $i = 1
+    ?>
+
+    <div class="container mt-5">
+        <div class="col-md-12 alert alert-primary"><?php echo $qry['title'] ?> question list.</div>
+        <div class="wrapper">
             <div class="container mt-4 mb-5">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Quiz list
+                                <h4>Question list
                                 </h4>
                             </div>
                             <div class="card-body">
                                 <table class="table table-bordered table-striped">
                                     <colgroup>
-                                        <col width="79%">
-                                        <col width="21%">
+                                        <col width="5%">
+                                        <col width="95%">
                                     </colgroup>
                                     <thead>
                                         <tr>
-                                            <th>Quiz Title</th>
-                                            <th>Action</th>
+                                            <th>#</th>
+                                            <th>Question</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $con = connect();
-                                        $query = "SELECT * FROM quiz";
-                                        $query_run = mysqli_query($con, $query);
+                                        if (isset($_GET['id'])) {
+                                            $quiz_id = mysqli_real_escape_string($con, $_GET['id']);
+                                            $query = "SELECT * FROM quiz_question WHERE quiz_id = '$quiz_id'";
+                                            $query_run = mysqli_query($con, $query);
+                                        }
                                         if (mysqli_num_rows($query_run) > 0) {
-                                            foreach ($query_run as $quiz) {
+                                            foreach ($query_run as $quiz_question) {
                                         ?>
                                                 <tr>
-                                                    <td><?= $quiz['title']; ?></td>
+                                                    <td><?php echo $i++ ?></td>
                                                     <td>
-                                                        <a href="quiz-page.php?id=<?= $quiz['id']; ?>" class="btn btn-info btn-sm">Take Quiz</a>
+                                                        <div>
+                                                            <?=
+                                                            $quiz_question['text'];
+                                                            $qid = $quiz_question['id'];
+                                                            ?>
+                                                        </div>
+                                                        <div>
+                                                            <p>Answer: </p>
+                                                            <form action="" method="post">
+                                                                <Select>
+
+                                                                </Select>
+                                                            </form>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                         <?php
@@ -99,27 +122,18 @@ print_r($_SESSION);
                                             echo "<h5> No Record Found </h5>";
                                         }
                                         ?>
+
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <br></br>
         </div>
     </div>
-    <footer align="center">
-        <div class="footer-content">
-            <ul>
-                <li><a class="navbtn" href="../about/about_lecture.html">About Lecture</a></li> |
-                <li><a class="navbtn" href="../about/about_us.html">About Us</a></li>
-            </ul>
-        </div>
-        <div class="footer-bottom">
-            <p>Copyright &copy;2022 Benkyoushio.</p>
-        </div>
-    </footer>
+
 </body>
 
 </html>

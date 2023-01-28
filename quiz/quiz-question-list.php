@@ -136,7 +136,6 @@ print_r($_SESSION);
                                         <tr>
                                             <td><?= $quiz_question['text']; ?></td>
                                             <td>
-                                                <a href="student-view.php?id=<?= $quiz_question['id']; ?>" class="btn btn-info btn-sm">Options</a>
                                                 <a href="question-edit.php?id=<?= $quiz_question['id']; ?>" class="btn btn-success btn-sm">Edit Question</a>
                                                 <form action="" method="POST" class="d-inline">
                                                     <input type="hidden" name="question_id" value="<?= $quiz_question['id']; ?>">

@@ -7,6 +7,11 @@ if (!isset($_SESSION["user"])) {
     exit();
 }
 
+if ($_SESSION["user_type"] != 1) {
+    header("location: dashboard.php");
+    exit();
+}
+
 if (isset($_GET["logout"])) {
     logoutUser();
 }

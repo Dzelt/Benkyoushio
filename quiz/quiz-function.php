@@ -1,26 +1,5 @@
 <?php
 
-
-// if (isset($_POST['edit_quiz'])) {
-
-//     $mysqli = connect();
-//     $id = mysqli_real_escape_string($mysqli, $_POST['id']);
-//     $title = mysqli_real_escape_string($mysqli, $_POST['title']);
-
-//     $query = "UPDATE quiz SET title = '$title' WHERE id = '$id' ";
-//     $query_run = mysqli_query($mysqli, $query);
-
-//     if ($query_run) {
-//         $_SESSION['message'] = "Quiz Updated Successfully";
-//         header("Location: quiz-management.php");
-//         exit(0);
-//     } else {
-//         $_SESSION['message'] = "Quiz Not Updated";
-//         header("Location: quiz-management.php");
-//         exit(0);
-//     }
-// }
-
 function addQuiz($title)
 {
     $mysqli = connect();
@@ -82,12 +61,33 @@ function editQuestion($id, $text)
     $stmt->execute();
     if ($stmt->affected_rows != 1) {
         $_SESSION['message'] = "Connection error!";
+        $stmt->close();
         header("Location: question-edit.php");
         return "An error occured. Try again.";
         exit(0);
     } else {
         $_SESSION['message'] = "Quiz Title Edited Successfully";
+        $stmt->close();
         header("Location: question-edit.php");
+        return "success";
+        exit(0);
+    }
+}
+
+function editOption($id, $text)
+{
+    $mysqli = connect();
+    $stmt = $mysqli->prepare("UPDATE question_option SET text = ? WHERE id = ?");
+    $stmt->bind_param("ss", $text, $id);
+    $stmt->execute();
+    if ($stmt->affected_rows != 1) {
+        $_SESSION['message'] = "Connection error!";
+        $stmt->close();
+        return "An error occured. Try again.";
+        exit(0);
+    } else {
+        $_SESSION['message'] = "Option Edited Successfully";
+        $stmt->close();
         return "success";
         exit(0);
     }
@@ -125,6 +125,29 @@ function addQuestion($quiz_id, $text)
     } else {
         $_SESSION['message'] = "New Question Successfully Added!";
         header("quiz-question-list.php");
+        return "success";
+        exit(0);
+    }
+}
+
+function addOption($question_id, $text)
+{
+    $mysqli = connect();
+
+    // Submitting option function
+    $stmt = $mysqli->prepare("INSERT INTO question_option(question_id, text) VALUES(?,?)");
+    $stmt->bind_param("ss", $question_id, $text);
+    $stmt->execute();
+    if ($stmt->affected_rows != 1) {
+        $_SESSION['message'] = "Option Not Added!";
+        $stmt->close();
+        header("question-edit.php");
+        return "An error occured. Try again.";
+        exit(0);
+    } else {
+        $_SESSION['message'] = "Option Successfully Added!";
+        $stmt->close();
+        header("question-edit.php");
         return "success";
         exit(0);
     }
@@ -172,23 +195,48 @@ function deleteQuestion($question_id)
     }
 }
 
-function addOption($question_id, $text, $is_right)
+function updateTrueAns($question_id, $option_id)
 {
     $mysqli = connect();
 
-    // Submitting option function
-    $stmt = $mysqli->prepare("INSERT INTO question_option(question_id, text, is_right) VALUES(?,?,?)");
-    $stmt->bind_param("sss", $question_id, $text, $is_right);
+    // look for the data information
+    $sql = "SELECT * FROM true_answer WHERE question_id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("s", $question_id);
     $stmt->execute();
-    if ($stmt->affected_rows != 1) {
-        $_SESSION['message'] = "Option Not Added!";
-        header("question-edit.php");
-        return "An error occured. Try again.";
-        exit(0);
+    $result = $stmt->get_result();
+    $data = $result->fetch_assoc();
+
+    if ($data == NULL) {
+        $stmt = $mysqli->prepare("INSERT INTO true_answer(question_id, option_id) VALUES(?,?)");
+        $stmt->bind_param("ss", $question_id, $option_id);
+        $stmt->execute();
+        if ($stmt->affected_rows != 1) {
+            $_SESSION['message'] = "Option answer Not saved!";
+            $stmt->close();
+            return "An error occured. Try again.";
+            exit(0);
+        } else {
+            $_SESSION['message'] = "Option answer Successfully saved!";
+            $stmt->close();
+            return "success";
+            exit(0);
+        }
     } else {
-        $_SESSION['message'] = "Option Successfully Added!";
-        header("question-edit.php");
-        return "success";
-        exit(0);
+        // Submitting option function
+        $stmt = $mysqli->prepare("UPDATE true_answer SET option_id = ? WHERE question_id = ?");
+        $stmt->bind_param("ss", $option_id, $question_id);
+        $stmt->execute();
+        if ($stmt->affected_rows != 1) {
+            $_SESSION['message'] = "Option answer Not saved!";
+            $stmt->close();
+            return "An error occured. Try again.";
+            exit(0);
+        } else {
+            $_SESSION['message'] = "Option answer Successfully saved!";
+            $stmt->close();
+            return "success";
+            exit(0);
+        }
     }
 }

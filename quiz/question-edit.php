@@ -17,7 +17,11 @@ if (isset($_POST['edit_question'])) {
 }
 
 if (isset($_POST['add_option'])) {
-    $response = addOption($_POST['question_id'], $_POST['text'], $_POST['is_right']);
+    $response = addOption($_POST['question_id'], $_POST['text']);
+}
+
+if (isset($_POST['choose_ans'])) {
+    $response = updateTrueAns($_POST['question_id'], $_POST['option_id']);
 }
 
 print_r($_SESSION);
@@ -58,7 +62,7 @@ print_r($_SESSION);
     </nav>
     <div class="page-title">
         <h1>Question Edit
-            <a href="quiz-management.php" class="btn btn-danger float">Back</a>
+            <!-- <a href="quiz-management.php" class="btn btn-danger float">Back</a> -->
         </h1>
     </div>
 
@@ -89,7 +93,7 @@ print_r($_SESSION);
                                         <input type="text" name="text" value="<?= $quiz_question['text']; ?>" class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <button type="submit" name="edit_question" class="btn btn-primary">Updated Question</button>
+                                        <button type="edit_question" name="edit_question" class="btn btn-primary">Updated Question</button>
                                     </div>
                                 </form>
                         <?php
@@ -123,45 +127,87 @@ print_r($_SESSION);
                             if (mysqli_num_rows($query_run) > 3) {
                                 $question_option = mysqli_fetch_array($query_run);
                         ?>
-                                <form action="" method="POST">
-                                    <div class="mb-3">
-                                        <input type="hidden" name="id" value=<?= $question_option['text']; ?>>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="text" name="question_opt[0]" value=<?= $question_option['text']; ?> class="form-control">
-                                        <label><input type="radio" name="is_right[0]" class="is_right" value="1"> <small>Choose above as answer</small></label>
-                                        <br>
-                                        <textarea rows="2" name="question_opt[1]" required="" class="form-control"></textarea>
-                                        <label><input type="radio" name="is_right[1]" class="is_right" value="1"> <small>Choose above as answer</small></label>
-                                        <br>
-                                        <textarea rows="2" name="question_opt[2]" required="" class="form-control"></textarea>
-                                        <label><input type="radio" name="is_right[2]" class="is_right" value="1"> <small>Choose above as answer</small></label>
-                                        <br>
-                                        <textarea rows="2" name="question_opt[3]" required="" class="form-control"></textarea>
-                                        <label><input type="radio" name="is_right[3]" class="is_right" value="1"> <small>Choose above as answer</small></label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <button type="submit" name="edit_option" class="btn btn-primary mt-2">Update Options</button>
-                                    </div>
-                                </form>
+                                <table class="table table-bordered table-striped">
+                                    <colgroup>
+                                        <col width="10">
+                                        <col width="70%">
+                                        <col width="20%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>Options Index</th>
+                                            <th>Options</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $query = "SELECT * FROM question_option WHERE question_id='$id'";
+                                        $query_run = mysqli_query($con, $query);
+                                        foreach ($query_run as $question_option) {
+                                        ?>
+                                            <tr>
+                                                <td><?= $question_option['id']; ?></td>
+                                                <td><?= $question_option['text']; ?></td>
+                                                <td>
+                                                    <a href="option-edit.php?id=<?= $question_option['id']; ?>" class="btn btn-success btn-sm">Edit Option</a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <?php
+                                $result = $con->query("SELECT * FROM true_answer WHERE question_id = $id")->fetch_array();
+                                if ($result != NULL) {
+                                ?>
+                                    <div class="col-md-12 alert alert-primary">The correct option was selected as Option Index: <?= $result['option_id']; ?>.</div>
+                                <?php
+                                } else {
+                                ?>
+                                    <div class="col-md-12 alert alert-danger">Plese select the answer.</div>
+                                <?php
+                                }
+                                ?>
+                                <div class="container mt-1">
+                                    <?php
+                                    $query = "SELECT * FROM true_answer WHERE question_id='$id' ";
+                                    $result = mysqli_query($con, $query);
+                                    ?>
+                                    <h4>Choose or edit answer.</h4>
+                                    <?php
+                                    $query = "SELECT * FROM question_option WHERE question_id='$id' ";
+                                    $result = mysqli_query($con, $query);
+                                    ?>
+                                    <label for="">Choose the option Index:</label>
+                                    <form action="" method="post">
+                                        <input type="hidden" name="question_id" value=<?= $id; ?>>
+                                        <select name="option_id">
+                                            <?php
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo "<option value='{$row['id']}'>{$row['id']}</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                        <button type="choose_ans" name="choose_ans" class="btn btn-primary mt-2">Submit</button>
+                                    </form>
+                                </div>
                             <?php
                             } else {
-                                echo "<h4>No Such Id Found or the options is below 4, please add the options below:</h4>";
+                                echo "<h4>No option or few options found, please add more options below:</h4>";
                                 $id = mysqli_real_escape_string($con, $_GET['id']);
-                                $query = "SELECT * FROM question_option WHERE question_id='$id' ";
-                                $query_run = mysqli_query($con, $query);
                             ?>
                                 <form action="" method="POST">
                                     <div class="mb-3">
-                                        <input type="hidden" name="question_id" value="<?= $question_id['id']; ?>">
+                                        <input type="hidden" name="question_id" value="<?= $id; ?>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="text" value="<?php echo @$_POST['text'] ?>" class="form-control">
-                                        <label><input type="checkbox" name="is_right" class="is_right" value="1"> <small>Choose above as answer or untick if not the answer.</small></label>
+                                        <label for="">Option</label>
+                                        <input type="text" name="text" class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <button type="submit" name="add_option" class="btn btn-primary mt-2">Add Options</button>
+                                        <button type="add_option" name="add_option" class="btn btn-primary mt-2">Add Options</button>
                                     </div>
                                 </form>
                         <?php
@@ -176,6 +222,5 @@ print_r($_SESSION);
     <div class="mt-5"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
-
 
 </html>

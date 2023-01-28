@@ -7,7 +7,7 @@ if (isset($_SESSION["user"])) {
 }
 
 if (isset($_POST['submit'])) {
-    $response = registerUser($_POST['email'], $_POST['username'], $_POST['password'], $_POST['confirm-password']);
+    $response = registerUser($_POST['user_type'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['confirm-password']);
 }
 ?>
 
@@ -38,10 +38,23 @@ if (isset($_POST['submit'])) {
         <a href="index.php"><img class="logo" src="./picture/logo.png" alt="image is not available"></a>
     </nav>
     <div class="container1">
+        <?php
+        if (@$response == "success") {
+        ?>
+            <h1>Registration Complete</h1>
+        <?php
+        } else {
+        ?>
+            <h1><?php echo @$response; ?></h1>
+            <br><br>
+        <?php
+        }
+        ?>
         <div class="signup-box">
             <h1>Sign Up</h1>
             <h4>It's free and only takes a minute</h4>
             <form action="" method="post" autocomplete="off">
+                <input type="hidden" name="user_type" value="2">
                 <label for="">Email *</label>
                 <input type="text" name="email" value="<?php echo @$_POST['email'] ?>">
                 <label for="">Username *</label>
@@ -60,19 +73,6 @@ if (isset($_POST['submit'])) {
         <p>
             Already have an account? <a href="login.php">Login here</a>
         </p>
-
-        <?php
-        if (@$response == "success") {
-        ?>
-            <p class="success">Registration Complete</p>
-        <?php
-        } else {
-        ?>
-            <p class="error"><?php echo @$response; ?></p>
-        <?php
-        }
-        ?>
-
     </div>
     <footer align="center">
         <div class="footer-bottom">

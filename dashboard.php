@@ -6,6 +6,16 @@ if (!isset($_SESSION["user"])) {
     header("location: index.php");
     exit();
 }
+if ($_SESSION["user_type"] != 2) {
+    header("location: admin-dashboard.php");
+    exit();
+}
+
+// if (isset($_SESSION["user"])) {
+//     if ($_SESSION["user_type"] != 2) {
+//         header("location: index.php");
+//     }
+// }
 
 if (isset($_GET["logout"])) {
     logoutUser();
