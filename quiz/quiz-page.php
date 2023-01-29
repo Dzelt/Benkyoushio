@@ -19,7 +19,6 @@ if (isset($_GET["logout"])) {
 
 $_SESSION['Quiz_id'] = $_GET['id'];
 
-print_r($_SESSION);
 
 ?>
 
