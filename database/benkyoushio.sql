@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2023 at 07:33 AM
+-- Generation Time: Jan 29, 2023 at 10:06 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -35,6 +35,36 @@ CREATE TABLE `answer` (
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `answer`
+--
+
+INSERT INTO `answer` (`id`, `quiz_id`, `question_id`, `option_id`, `user_id`) VALUES
+(2, 11, 16, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum`
+--
+
+CREATE TABLE `forum` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `text` text NOT NULL,
+  `time` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `forum`
+--
+
+INSERT INTO `forum` (`id`, `user_id`, `username`, `text`, `time`) VALUES
+(5, 1, 'Yuna', 'Hi, This is the first post.', '2023-01-29 08:53:59'),
+(6, 1, 'Yuna', 'I like to eat watermelon.', '2023-01-29 08:54:14'),
+(7, 2, 'Admin', 'I glad to hear that you are like watermelon.', '2023-01-29 08:56:57');
+
 -- --------------------------------------------------------
 
 --
@@ -47,6 +77,24 @@ CREATE TABLE `question_option` (
   `text` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `question_option`
+--
+
+INSERT INTO `question_option` (`id`, `question_id`, `text`) VALUES
+(1, 16, 'A food.'),
+(2, 16, 'A vehicle.'),
+(3, 16, 'A tool.'),
+(4, 16, 'A shop.'),
+(5, 17, '1'),
+(6, 17, '2'),
+(7, 17, '5'),
+(8, 17, '4'),
+(9, 18, '2'),
+(10, 18, '1'),
+(11, 18, '8'),
+(12, 18, '12');
+
 -- --------------------------------------------------------
 
 --
@@ -57,6 +105,14 @@ CREATE TABLE `quiz` (
   `id` int(11) NOT NULL,
   `title` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `quiz`
+--
+
+INSERT INTO `quiz` (`id`, `title`) VALUES
+(11, 'Simple quiz'),
+(12, 'Simple Elementary Math Quiz');
 
 -- --------------------------------------------------------
 
@@ -75,9 +131,9 @@ CREATE TABLE `quiz_question` (
 --
 
 INSERT INTO `quiz_question` (`id`, `quiz_id`, `text`) VALUES
-(13, 8, 'Question 1'),
-(14, 9, '1+1 = ?'),
-(15, 9, '2 x 2 = ?');
+(16, 11, 'What is a car?'),
+(17, 12, '1+1 = ?'),
+(18, 12, '2 x 2 = ?');
 
 -- --------------------------------------------------------
 
@@ -111,10 +167,9 @@ CREATE TABLE `true_answer` (
 --
 
 INSERT INTO `true_answer` (`id`, `quiz_id`, `question_id`, `option_id`) VALUES
-(1, 0, 10, 35),
-(3, 0, 11, 37),
-(4, 0, 14, 46),
-(5, 0, 15, 51);
+(7, 11, 16, 2),
+(8, 12, 17, 6),
+(9, 12, 18, 11);
 
 -- --------------------------------------------------------
 
@@ -146,6 +201,12 @@ INSERT INTO `user` (`id`, `user_type`, `username`, `email`, `password`) VALUES
 -- Indexes for table `answer`
 --
 ALTER TABLE `answer`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `forum`
+--
+ALTER TABLE `forum`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -193,25 +254,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `answer`
 --
 ALTER TABLE `answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `forum`
+--
+ALTER TABLE `forum`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `question_option`
 --
 ALTER TABLE `question_option`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `quiz_question`
 --
 ALTER TABLE `quiz_question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `quiz_score`
@@ -223,7 +290,7 @@ ALTER TABLE `quiz_score`
 -- AUTO_INCREMENT for table `true_answer`
 --
 ALTER TABLE `true_answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user`

@@ -47,7 +47,7 @@ if (isset($_GET["logout"])) {
         <a href="index.php"><img class="logo" src="./picture/logo.png" alt="image is not available"></a>
         <ul class="menubtn">
             <li><a class="navbtn" href="./quiz/quiz-management.php">Quiz</a></li>
-            <li><a class="navbtn" href="#">Forum</a></li>
+            <li><a class="navbtn" href="../Benkyoushio/Forum/main-forum.php">Forum</a></li>
             <li><a class="navbtn" href="?logout">Log Out</a></li>
         </ul>
     </nav>
