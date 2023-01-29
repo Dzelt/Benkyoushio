@@ -19,6 +19,7 @@ if (isset($_POST['add_question'])) {
 if (isset($_POST['delete_question'])) {
     $response = deleteQuestion($_POST['question_id']);
 }
+$_SESSION['Quiz_id'] = $_GET['id'];
 
 print_r($_SESSION);
 

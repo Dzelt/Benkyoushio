@@ -21,10 +21,12 @@ if (isset($_POST['add_option'])) {
 }
 
 if (isset($_POST['choose_ans'])) {
-    $response = updateTrueAns($_POST['question_id'], $_POST['option_id']);
+    $response = updateTrueAns($_POST['quiz_id'], $_POST['question_id'], $_POST['option_id']);
 }
 
 print_r($_SESSION);
+
+$quiz_id = $_SESSION['Quiz_id'];
 
 ?>
 
@@ -62,7 +64,7 @@ print_r($_SESSION);
     </nav>
     <div class="page-title">
         <h1>Question Edit
-            <!-- <a href="quiz-management.php" class="btn btn-danger float">Back</a> -->
+            <a href="quiz-question-list.php?id=<?= $quiz_id; ?>" class="btn btn-danger">BACK</a>
         </h1>
     </div>
 
@@ -129,13 +131,11 @@ print_r($_SESSION);
                         ?>
                                 <table class="table table-bordered table-striped">
                                     <colgroup>
-                                        <col width="10">
-                                        <col width="70%">
+                                        <col width="80%">
                                         <col width="20%">
                                     </colgroup>
                                     <thead>
                                         <tr>
-                                            <th>Options Index</th>
                                             <th>Options</th>
                                             <th>Action</th>
                                         </tr>
@@ -147,7 +147,6 @@ print_r($_SESSION);
                                         foreach ($query_run as $question_option) {
                                         ?>
                                             <tr>
-                                                <td><?= $question_option['id']; ?></td>
                                                 <td><?= $question_option['text']; ?></td>
                                                 <td>
                                                     <a href="option-edit.php?id=<?= $question_option['id']; ?>" class="btn btn-success btn-sm">Edit Option</a>
@@ -161,8 +160,12 @@ print_r($_SESSION);
                                 <?php
                                 $result = $con->query("SELECT * FROM true_answer WHERE question_id = $id")->fetch_array();
                                 if ($result != NULL) {
+                                    $choosen_id = $result['option_id'];
+                                    $choosen_option = "SELECT * FROM question_option WHERE id='$choosen_id' ";
+                                    $arr = mysqli_query($con, $choosen_option);
+                                    $the_choosen_option = mysqli_fetch_assoc($arr);
                                 ?>
-                                    <div class="col-md-12 alert alert-primary">The correct option was selected as Option Index: <?= $result['option_id']; ?>.</div>
+                                    <div class="col-md-12 alert alert-primary">The correct choosen option was : <?= $the_choosen_option['text']; ?>.</div>
                                 <?php
                                 } else {
                                 ?>
@@ -180,17 +183,18 @@ print_r($_SESSION);
                                     $query = "SELECT * FROM question_option WHERE question_id='$id' ";
                                     $result = mysqli_query($con, $query);
                                     ?>
-                                    <label for="">Choose the option Index:</label>
                                     <form action="" method="post">
+                                        <input type="hidden" name="quiz_id" value="<?= $quiz_id; ?>">
                                         <input type="hidden" name="question_id" value=<?= $id; ?>>
                                         <select name="option_id">
                                             <?php
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                echo "<option value='{$row['id']}'>{$row['id']}</option>";
+                                                echo "<option value='{$row['id']}'>{$row['text']}</option>";
                                             }
                                             ?>
                                         </select>
                                         <button type="choose_ans" name="choose_ans" class="btn btn-primary mt-2">Submit</button>
+                                        <a href="quiz-question-list.php?id=<?= $quiz_id; ?>" class="btn btn-danger">BACK</a>
                                     </form>
                                 </div>
                             <?php

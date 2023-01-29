@@ -16,6 +16,9 @@ if (isset($_POST['edit_option'])) {
     $response = editOption($_POST['id'], $_POST['text']);
 }
 
+
+$quiz_id = $_SESSION['Quiz_id'];
+
 print_r($_SESSION);
 
 ?>
@@ -54,7 +57,7 @@ print_r($_SESSION);
     </nav>
     <div class="page-title">
         <h1>Option Edit
-            <a href="quiz-management.php" class="btn btn-danger float">Back</a>
+            <a href="quiz-question-list.php?id=<?= $quiz_id; ?>" class="btn btn-danger">BACK</a>
         </h1>
     </div>
     <div class="container mt-5 md-5">

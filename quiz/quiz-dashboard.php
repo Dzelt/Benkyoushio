@@ -91,6 +91,7 @@ print_r($_SESSION);
                                                     <td><?= $quiz['title']; ?></td>
                                                     <td>
                                                         <a href="quiz-page.php?id=<?= $quiz['id']; ?>" class="btn btn-info btn-sm">Take Quiz</a>
+                                                        <a href="quiz-result.php?id=<?= $quiz['id']; ?>" class="btn btn-success btn-sm">Result</a>
                                                     </td>
                                                 </tr>
                                         <?php

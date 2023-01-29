@@ -195,7 +195,7 @@ function deleteQuestion($question_id)
     }
 }
 
-function updateTrueAns($question_id, $option_id)
+function updateTrueAns($quiz_id, $question_id, $option_id)
 {
     $mysqli = connect();
 
@@ -208,8 +208,8 @@ function updateTrueAns($question_id, $option_id)
     $data = $result->fetch_assoc();
 
     if ($data == NULL) {
-        $stmt = $mysqli->prepare("INSERT INTO true_answer(question_id, option_id) VALUES(?,?)");
-        $stmt->bind_param("ss", $question_id, $option_id);
+        $stmt = $mysqli->prepare("INSERT INTO true_answer(quiz_id, question_id, option_id) VALUES(?,?,?)");
+        $stmt->bind_param("sss", $quiz_id, $question_id, $option_id);
         $stmt->execute();
         if ($stmt->affected_rows != 1) {
             $_SESSION['message'] = "Option answer Not saved!";
@@ -234,6 +234,52 @@ function updateTrueAns($question_id, $option_id)
             exit(0);
         } else {
             $_SESSION['message'] = "Option answer Successfully saved!";
+            $stmt->close();
+            return "success";
+            exit(0);
+        }
+    }
+}
+
+function updateUserAns($question_id, $user_id, $quiz_id, $option_id)
+{
+    $mysqli = connect();
+
+    // look for the data information
+    $sql = "SELECT * FROM answer WHERE question_id = ? AND user_id = ? AND quiz_id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("sss", $question_id, $user_id, $quiz_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = $result->fetch_assoc();
+
+    if ($data == NULL) {
+        $stmt = $mysqli->prepare("INSERT INTO answer(quiz_id, question_id, option_id, user_id) VALUES(?,?,?,?)");
+        $stmt->bind_param("ssss", $quiz_id, $question_id, $option_id, $user_id);
+        $stmt->execute();
+        if ($stmt->affected_rows != 1) {
+            $_SESSION['message'] = "Your answer is Not saved!";
+            $stmt->close();
+            return "An error occured. Try again.";
+            exit(0);
+        } else {
+            $_SESSION['message'] = "Your answer Successfully saved!";
+            $stmt->close();
+            return "success";
+            exit(0);
+        }
+    } else {
+        // Submitting option function
+        $stmt = $mysqli->prepare("UPDATE answer SET option_id = ? WHERE question_id = ? AND user_id = ?");
+        $stmt->bind_param("sss", $option_id, $question_id, $user_id);
+        $stmt->execute();
+        if ($stmt->affected_rows != 1) {
+            $_SESSION['message'] = "Your answer is Not saved!";
+            $stmt->close();
+            return "An error occured. Try again.";
+            exit(0);
+        } else {
+            $_SESSION['message'] = "Your answer Successfully saved!";
             $stmt->close();
             return "success";
             exit(0);

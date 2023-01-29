@@ -16,11 +16,6 @@ if ($_SESSION["user_type"] != 2) {
 if (isset($_GET["logout"])) {
     logoutUser();
 }
-if (isset($_POST['sub_ans'])) {
-    $response = updateUserAns($_POST['question_id'], $_POST['user_id'], $_POST['option_id']);
-}
-
-$_SESSION['Quiz_id'] = $_GET['id'];
 
 print_r($_SESSION);
 
@@ -63,17 +58,39 @@ print_r($_SESSION);
     <?php
     $con = connect();
     $quiz_id = $_SESSION['Quiz_id'];
-    $arr = $con->query("SELECT * FROM quiz WHERE id='$quiz_id'")->fetch_array();
-    $question = $con->query("SELECT * FROM quiz_question WHERE quiz_id='$quiz_id' LIMIT 1")->fetch_array();
-    $question_id = $question['id'];
+    $user_id = $_SESSION['user_id'];
+
+    $query = "SELECT COUNT(id) AS count FROM quiz_question GROUP BY quiz_id = '$quiz_id' LIMIT 1,1";
+    $result = mysqli_query($con, $query);
+    $row = mysqli_fetch_assoc($result);
+
+    $qry = "SELECT answer.quiz_id, COUNT(*) as count FROM answer JOIN true_answer ON answer.quiz_id = true_answer.quiz_id AND answer.question_id = true_answer.question_id AND answer.option_id = true_answer.option_id WHERE answer.user_id = '$user_id' AND answer.quiz_id = '$quiz_id' GROUP BY answer.quiz_id";
+    $rst = mysqli_query($con, $qry);
+    $rw = mysqli_fetch_assoc($rst);
+
+
+
     ?>
-    <div class="mt-5 container">
-        <div class="text1 justify-content-center">
-            <div class="col-md-12 alert alert-primary">Your are choosing quiz: <?php echo $arr['title'] ?></div>
+    <div class="text1">
+        <div class="container">
+            <h3>The total question for this quiz: <?= $row['count']; ?></h3>
             <br>
-            <a class="btn btn-primary" href="answer-sheet.php?id=<?= $question_id; ?>">Start Quiz</a> <a class="btn btn-danger" href="quiz-dashboard.php">Back</a>
+            <?php
+            if ($rw['count'] == NULL) {
+            ?>
+                <h3>The score you got: 0</h3>
+            <?php
+            } else {
+            ?>
+                <h3>The score you got: <?= $rw['count']; ?></h3>
+            <?php
+            }
+            ?>
+
+            <a href="quiz-dashboard.php" class="btn btn-danger mt-5">BACK</a>
         </div>
     </div>
+
 </body>
 
 </html>
