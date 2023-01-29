@@ -16,9 +16,6 @@ if ($_SESSION["user_type"] != 2) {
 if (isset($_GET["logout"])) {
     logoutUser();
 }
-if (isset($_POST['sub_ans'])) {
-    $response = updateUserAns($_POST['question_id'], $_POST['user_id'], $_POST['option_id']);
-}
 
 $_SESSION['Quiz_id'] = $_GET['id'];
 

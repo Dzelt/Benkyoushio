@@ -20,7 +20,6 @@ if (isset($_POST['delete_quiz'])) {
     $response = deleteQuiz($_POST['quiz_id']);
 }
 
-print_r($_SESSION);
 
 ?>
 

@@ -24,7 +24,6 @@ $i = 1;
 $con = connect();
 $quiz_id = mysqli_real_escape_string($con, $_SESSION['Quiz_id']);
 
-print_r($_SESSION);
 
 ?>
 

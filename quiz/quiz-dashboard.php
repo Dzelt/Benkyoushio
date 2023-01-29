@@ -17,7 +17,6 @@ if (isset($_GET["logout"])) {
     logoutUser();
 }
 
-print_r($_SESSION);
 
 ?>
 

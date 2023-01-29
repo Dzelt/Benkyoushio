@@ -17,7 +17,6 @@ if (isset($_GET["logout"])) {
     logoutUser();
 }
 
-print_r($_SESSION);
 
 ?>
 
@@ -28,7 +27,7 @@ print_r($_SESSION);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Title -->
-    <title>Benkyoushio - Quiz Page</title>
+    <title>Benkyoushio - Result</title>
     <!-- Favicon -->
     <link rel="icon" href="../picture/favicon.png">
     <!--Use this css for Navigation bar and footer-->

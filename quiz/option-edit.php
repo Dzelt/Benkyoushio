@@ -16,10 +16,8 @@ if (isset($_POST['edit_option'])) {
     $response = editOption($_POST['id'], $_POST['text']);
 }
 
-
 $quiz_id = $_SESSION['Quiz_id'];
 
-print_r($_SESSION);
 
 ?>
 

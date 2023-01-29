@@ -11,17 +11,10 @@ if ($_SESSION["user_type"] != 2) {
     exit();
 }
 
-// if (isset($_SESSION["user"])) {
-//     if ($_SESSION["user_type"] != 2) {
-//         header("location: index.php");
-//     }
-// }
-
 if (isset($_GET["logout"])) {
     logoutUser();
 }
 
-print_r($_SESSION);
 
 ?>
 

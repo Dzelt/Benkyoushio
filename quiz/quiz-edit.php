@@ -16,7 +16,6 @@ if (isset($_POST['edit_quiz'])) {
     $response = editQuiz($_POST['id'], $_POST['title']);
 }
 
-print_r($_SESSION);
 
 ?>
 

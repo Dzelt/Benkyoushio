@@ -24,7 +24,6 @@ if (isset($_POST['choose_ans'])) {
     $response = updateTrueAns($_POST['quiz_id'], $_POST['question_id'], $_POST['option_id']);
 }
 
-print_r($_SESSION);
 
 $quiz_id = $_SESSION['Quiz_id'];
 
