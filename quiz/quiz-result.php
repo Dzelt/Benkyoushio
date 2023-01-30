@@ -17,6 +17,7 @@ if (isset($_GET["logout"])) {
     logoutUser();
 }
 
+$_SESSION['Quiz_id'] = $_GET['id'];
 
 ?>
 
@@ -58,6 +59,7 @@ if (isset($_GET["logout"])) {
     $con = connect();
     $quiz_id = $_SESSION['Quiz_id'];
     $user_id = $_SESSION['user_id'];
+
 
     $query = "SELECT COUNT(id) AS count FROM quiz_question GROUP BY quiz_id = '$quiz_id' LIMIT 1,1";
     $result = mysqli_query($con, $query);
